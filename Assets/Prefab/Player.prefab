@@ -4257,8 +4257,8 @@ GameObject:
   - component: {fileID: 6618281842108741444}
   - component: {fileID: 6618281842108345384}
   - component: {fileID: 6618281842117826892}
-  - component: {fileID: 6618281842108345390}
   - component: {fileID: 6618281842108345385}
+  - component: {fileID: 6618281842108345390}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -4302,7 +4302,7 @@ CapsuleCollider:
   m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!95 &6618281842117826892
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -4319,20 +4319,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &6618281842108345390
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6618281842108312484}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 431dce1605a1a4347bec3a1cd68044b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Owner>k__BackingField: {fileID: 6618281842108345385}
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!114 &6618281842108345385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4349,6 +4336,19 @@ MonoBehaviour:
   ap_: 100
   lv_: 1
   exp_: 0
+--- !u!114 &6618281842108345390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6618281842108312484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 431dce1605a1a4347bec3a1cd68044b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Owner>k__BackingField: {fileID: 6618281842108345385}
 --- !u!1 &6618281842108312486
 GameObject:
   m_ObjectHideFlags: 0

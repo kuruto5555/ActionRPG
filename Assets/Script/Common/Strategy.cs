@@ -1,16 +1,12 @@
-using UnityEngine;
-
-public class Strategy : MonoBehaviour
+/// <summary>
+/// ストラテジーパターンのインターフェース
+/// ストラテジーパターンを実装したいクラスに継承してください。
+/// ストラテジーの切り替えは、使用するクラス側で実装してください。
+/// </summary>
+public interface IStrategy
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	/// <summary>
+	/// 実行
+	/// </summary>
+	void Exe();
 }

@@ -17,7 +17,10 @@ namespace BTLGeek.Character.Player.State
         /// </summary>
         void Start()
         {
-
+            // オーナーチェック
+            if (null == Owner) {
+                Debug.LogError(name + "にオーナーが設定されていません！");
+            }
         }
 
         /// <summary>
