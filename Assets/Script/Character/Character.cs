@@ -9,44 +9,28 @@ namespace BTLGeek.Character
         /// </summary>
         public class Construct
         {
-            /// <summary>
-            /// 最大体力
-            /// </summary>
+            /// <summary> 最大体力 </summary>
             public const int HP_MAX = 99999;
 
-            /// <summary>
-            /// 最小体力
-            /// </summary>
+            /// <summary> 最小体力 </summary>
             public const short HP_MIN = 0;
 
-            /// <summary>
-            /// 最大アクションポイント
-            /// </summary>
+            /// <summary> 最大アクションポイント </summary>
             public const short AP_MAX = 999;
 
-            /// <summary>
-            /// 最小アクションポイント
-            /// </summary>
+            /// <summary> 最小アクションポイント </summary>
             public const short AP_MIN = 0;
 
-            /// <summary>
-            /// 最大レベル
-            /// </summary>
+            /// <summary> 最大レベル </summary>
             public const short LV_MAX = 100;
 
-            /// <summary>
-            /// 最小レベル
-            /// </summary>
+            /// <summary> 最小レベル </summary>
             public const short LV_MIN = 1;
 
-            /// <summary>
-            /// 最大経験値
-            /// </summary>
+            /// <summary> 最大経験値 </summary>
             public const int EXP_MAX = 9999999;
 
-            /// <summary>
-            /// 最小経験値
-            /// </summary>
+            /// <summary> 最小経験値 </summary>
             public const short EXP_MIN = 0;
         }
 

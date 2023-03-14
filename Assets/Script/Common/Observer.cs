@@ -4,39 +4,62 @@ using UnityEngine;
 namespace BTLGeek.Common
 {
     /// <summary>
-    /// 観察者
-    /// 
+    /// オブザーバーパターンの登録者インターフェース
     /// </summary>
-    public abstract class IObserver
+    public interface ISubscriber
     {
-        /*---- 通知を受け取る者たち ----*/
-        /// <summary>
-        /// 
-        /// </summary>
-        List<Object> objects_ = null;
+        void Reception(int eventType, Object @object);
+    }
+
+    /// <summary>
+    /// オブザーバーパターンの観察者
+    /// </summary>
+    public class Observer
+    {
+        /*---- メンバ変数 ----*/
+        /// <summary> 通知を受ける者たち </summary>
+        private List<ISubscriber> subscriberList_ = null;
 
         /*---- メソッド ----*/
         /// <summary>
-        /// 毎フレーム呼ばれる
-        /// </summary>
-        public abstract void Update();
-
-        /// <summary>
         /// 契約
         /// </summary>
-        /// <typeparam name="T">契約者のクラス</typeparam>
-        /// <param name="">契約者</param>
-        public void Subscribe<T>(T subscriber) where T : Object
-		{
-            // 登録者の判定
+        /// <param name="subscriber">契約者</param>
+        public void Subscribe(ISubscriber subscriber)
+        {
+            // 登録者がnullでないなら登録する
             if (subscriber != null) {
-                // 登録者がnullだった場合
-                Debug.LogError("登録者がnullです。");
+                subscriberList_.Add(subscriber);
             }
+        }
 
-            // 登録
-            Debug.Log(subscriber.name + "を、" + this.ToString() + "に登録します。");
-            objects_.Add(subscriber);
+        /// <summary>
+        /// 解約
+        /// </summary>
+        /// <param name="canceler">解約者</param>
+        public void Release(ISubscriber canceler)
+        {
+            subscriberList_.Remove(canceler);
+        }
+
+        /// <summary>
+        /// 登録者に通知
+        /// </summary>
+        /// <param name="eventType">通知する種別</param>
+        /// <param name="object"></param>
+        protected void NotifySubscribers(int eventType, Object @object = null)
+        {
+            foreach (ISubscriber subscriber in subscriberList_) {
+                // 登録者がnullでないか判定
+                if (subscriber == null) {
+                    // nullの場合はリストから削除しておく
+                    subscriberList_.Remove(subscriber);
+                }
+                else {
+                    // nullでない場合は通知する
+                    subscriber.Reception(eventType, @object);
+                }
+            }
         }
     }
 }
