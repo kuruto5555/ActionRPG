@@ -27,9 +27,9 @@ namespace BTLGeek.Common
             if (Instance != null) {
                 // 既に生成済みの場合
                 // エラーログ表示
-                Debug.LogError(typeof(T) + "は既に他のオブジェクトにアタッチされているため破棄しました。\n"
-                               + "既にアタッチされているオブジェクト：" + Instance.gameObject.name + "\n"
-                               + "今回アタッチしたオブジェクト      ：" + gameObject.name);
+                Debug.LogError($"{typeof(T)}は既に他のオブジェクトにアタッチされているため破棄しました。\n" +
+                               $"既にアタッチされているオブジェクト：{Instance.gameObject.name}\n" +
+                               $"今回アタッチしたオブジェクト      ：{gameObject.name}");
 
                 // 既存を残して、自分を破棄する
                 Destroy(this);

@@ -15,9 +15,11 @@ namespace BTLGeek.Character.Player.State
         /// <summary>
         /// Updateが初めて呼ばれる際に一度だけ呼ばれる
         /// </summary>
-        void Start()
+        protected override void Start()
         {
-
+            // 基底クラスのStartメソッドを先に実行する。
+            base.Start( );
+            // 
         }
 
         /// <summary>

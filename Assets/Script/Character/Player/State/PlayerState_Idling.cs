@@ -15,12 +15,12 @@ namespace BTLGeek.Character.Player.State
         /// <summary>
         /// Updateが初めて呼ばれる際に一度だけ呼ばれる
         /// </summary>
-        void Start()
+        protected override void Start()
         {
-            // オーナーチェック
-            if (null == Owner) {
-                Debug.LogError(name + "にオーナーが設定されていません！");
-            }
+            // 基底クラスのStartメソッドを先に実行する。
+            base.Start( );
+            // 待機モーションを再生する
+
         }
 
         /// <summary>

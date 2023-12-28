@@ -18,6 +18,14 @@ namespace BTLGeek.Common
         protected T Owner { get; set; } = null;
 
         /*---- メソッド ----*/
+        protected virtual void Start()
+        {
+            // オーナーチェック
+            if (null == Owner) {
+                Debug.LogError(name + "にオーナーが設定されていません！");
+            }
+        }
+
         /// <summary>
         /// ステート変更
         /// </summary>

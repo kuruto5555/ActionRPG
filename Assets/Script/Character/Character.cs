@@ -28,7 +28,7 @@ namespace BTLGeek.Character
             public const short LV_MIN = 1;
 
             /// <summary> 最大経験値 </summary>
-            public const int EXP_MAX = 9999999;
+            public const int EXP_MAX = 99999999;
 
             /// <summary> 最小経験値 </summary>
             public const short EXP_MIN = 0;

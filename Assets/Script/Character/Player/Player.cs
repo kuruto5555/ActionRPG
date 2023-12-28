@@ -1,9 +1,18 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace BTLGeek.Character.Player
 {
     public class Player : Character
     {
+        /*---- プロパティ ----*/
+        /// <summary> ダッシュ中フラグ(true:ダッシュ中 false:ダッシュしていない) </summary>
+//        [field:NonSerialized]
+        [field:SerializeField]
+        public bool IsDash { get; private set; } = false;
+
         /*---- メンバ変数 ----*/
         /// <summary>
         /// プレイヤーモデルの親オブヘクト
@@ -18,11 +27,22 @@ namespace BTLGeek.Character.Player
         [field:Range(0.1f, 10f)]
         private float moveSpeed_ = 1.0f;
 
+        /// <summary> ダッシュ時の移動速度 </summary>
+        [field:SerializeField]
+        [field:Tooltip("ダッシュの移動速度倍率(min:1 max:10)")]
+        [field:Range(1f, 20f)]
+        private float dashSpeed_ = 2.0f;
+
         /// <summary> 回転速度 </summary>
         [field:SerializeField]
         [field:Tooltip("回転速度(min:1 max:1080)")]
         [field:Range(1f, 1080f)]
         private float rotateSpeed_ = 360f;
+
+        /// <summary> カメラを持たせている、スプリングアーム </summary>
+        [field:SerializeField]
+        [field:Tooltip("カメラをもたせているSpringArm")]
+        private GameObject springArm_ = null;
 
         /// <summary> ステート </summary>
         private Common.State<Player> state_ = null;
@@ -38,17 +58,13 @@ namespace BTLGeek.Character.Player
         /// </summary>
         void Start()
         {
-            // アニメーターのnillチェック
-            if(null == animator_) {
-                // nullだった場合
-                // アニメーターの取得
-                animator_ = GetComponent<Animator>();
-                // 取得結果チェック
-                if (null == animator_) {
-                    // 取得できなかった場合
-                    // エラーログ出力
-                    Debug.LogError(gameObject.name + "にanimatorをアタッチしてください。");
-                }
+            // 各インスタンスの取得
+            animator_ = GetComponentInChildren<Animator>();
+            // 取得結果チェック
+            if (null == animator_) {
+                // 取得できなかった場合
+                // エラーログ出力
+                Debug.LogError($"{gameObject.name}にanimatorをアタッチしてください。");
             }
         }
 
@@ -57,8 +73,46 @@ namespace BTLGeek.Character.Player
         /// </summary>
         void Update()
         {
-            // 移動
-            Move( );
+            Attack( );  // 攻撃
+            Move( );    // 移動
+        }
+
+        /// <summary>
+        /// 毎フレームUpdate関数の呼ばれる
+        /// </summary>
+        private void LateUpdate()
+        {
+            Look( );    // 視点
+        }
+
+        /// <summary>
+        /// 攻撃
+        /// </summary>
+        /// <remarks>
+        /// 左クリック：通常攻撃
+        /// 右クリック：スキル１
+        /// Ｑキー　　：スキル２
+        /// </remarks>
+        private void Attack()
+        {
+            if (Input.GetKey(KeyCode.Q)) Skill_2( );                // スキル２
+            else if (Input.GetKey(KeyCode.Mouse1)) Skill_1( );      // スキル３
+            else if (Input.GetKey(KeyCode.Mouse0)) NomalAttack( );  // 通常攻撃
+        }
+
+        private void NomalAttack()
+        {
+
+        }
+
+        private void Skill_1()
+        {
+
+        }
+
+        private void Skill_2()
+        {
+
         }
 
         /// <summary>
@@ -71,52 +125,56 @@ namespace BTLGeek.Character.Player
         private void Move()
         {
             // ローカル変数宣言＆初期化
-            bool isMove     = false;                // 移動の入力があったか(true:あり false:なし)
             Vector3 dir     = Vector3.zero;         // 移動方向
-            Vector3 pos     = transform.position;   // プレイヤーの座標
-            float cosTheta  = 0f;                   // 進行方向が右か左か(正の値:右 負の値:左)
-            float angle     = 0f;                   // 進行方向へ回転したい角度
-            float maxRotate = 0f;                   // 回転時の最大回転角度
 
             // 入力判定
-            if (Input.GetKey(KeyCode.W)) {
-                dir.z += 1;
-                isMove = true;
-            }
-            if (Input.GetKey(KeyCode.S)) {
-                dir.z -= 1;
-                isMove = true;
-            }
-            if (Input.GetKey(KeyCode.D)) {
-                dir.x += 1;
-                isMove = true;
-            }
-            if (Input.GetKey(KeyCode.A)) {
-                dir.x -= 1;
-                isMove = true;
-            }
+            dir.z += (Input.GetKey(KeyCode.W)) ? 1f : 0f;
+            dir.z -= (Input.GetKey(KeyCode.S)) ? 1f : 0f;
+            dir.x += (Input.GetKey(KeyCode.D)) ? 1f : 0f;
+            dir.x -= (Input.GetKey(KeyCode.A)) ? 1f : 0f;
+            IsDash = (IsDash == true || Input.GetKey(KeyCode.LeftShift)) ? true : false;
 
-            // 同時入力対策
+            // 移動量が0なら各フラグをフォルスにし、待機Animationを再生
             if(dir.magnitude == 0) {
-                isMove = false;
+                IsDash = false;
+                animator_.Play("PlayerIdlingAnimation");
+                return;
             }
 
-            // 入力があれば更新する
-            if (isMove) {
-                // カメラのフロント方向を基準に座標更新
-                pos += Camera.main.transform.right   * dir.normalized.x * moveSpeed_ * Time.deltaTime;
-                pos += Camera.main.transform.forward * dir.normalized.z * moveSpeed_ * Time.deltaTime;
-                transform.position = pos;
-
-                // プレイヤーの向きと移動方向を比較してキャラクターの向きを更新
-                cosTheta = Vector3.Dot(model_.transform.right, dir);
-                angle = Vector3.Angle(model_.transform.forward, dir); // 回転したい角度
-                maxRotate = rotateSpeed_ * Mathf.Sign(cosTheta) * Time.deltaTime; 
-                if (angle >= Mathf.Epsilon) {
-                    // モデルが移動方向を徐々に向く
-                    model_.transform.Rotate(0.0f, Mathf.Min(maxRotate, angle), 0.0f);
-                }
+            // 移動モーション再生
+            if (IsDash) {
+                animator_.Play("PlayerRunAnimation");
             }
+            else {
+                animator_.Play("PlayerWalkAnimation");
+            }
+
+            // カメラのフロント方向を基準に座標更新
+            Vector3 moveValue = Camera.main.transform.forward * dir.normalized.z    // カメラの前方向
+                              + Camera.main.transform.right   * dir.normalized.x;   // カメラの右方向
+            moveValue.y = 0;    // 上下は無視する
+            transform.position += moveValue.normalized * (IsDash ? dashSpeed_ : moveSpeed_) * Time.deltaTime;
+
+            // プレイヤーの向きと移動方向を比較してキャラクターの向きを更新
+            float angle = Vector3.Angle(model_.transform.forward, moveValue);       // 回転したい角度
+            float cosTheta = Vector3.Dot(model_.transform.right, moveValue);        // 進行方向が右か左か(正の値:右 負の値:左)
+            float maxRotate = rotateSpeed_ * Mathf.Sign(cosTheta) * Time.deltaTime; // 回転時の最大回転角度
+            if (angle >= Mathf.Epsilon) {
+                // モデルが移動方向を徐々に向く
+                model_.transform.Rotate(0.0f, Mathf.Min(maxRotate, angle), 0.0f);
+            }
+        }
+
+        /// <summary>
+        /// 視点移動
+        /// </summary>
+        private void Look()
+        {
+            Transform transform = springArm_.transform;
+            float rotateX =  Input.GetAxis("Mouse X"); // マウスの横方向の移動量
+            float rotateY = -Input.GetAxis("Mouse Y"); // マウスの縦方向の移動量
+            transform.RotateAround(transform.position, Vector3.up,      rotateX * rotateSpeed_ * Time.deltaTime);
+            transform.RotateAround(transform.position, transform.right, rotateY * rotateSpeed_ * Time.deltaTime);
         }
     }
 }
