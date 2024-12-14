@@ -86,7 +86,7 @@
 ■６：変数
 先頭にアクセス範囲を示す「g」、「m」または「l」と、「_」、
 データ型を示す文字を付ける。
-    g：静的(static)変数
+    g：public以上の静的(static)変数
     m：メンバ変数
     l：関数内変数
 
@@ -109,4 +109,12 @@
         Dictionary ：dic
         その他は任せます。わかりやすいように3文字以内で。
 
-    例１）
+    例１）publicな静的メンバ変数
+        public static int g_iEnemyCount;
+
+    例２）メンバ変数
+        public string m_strPlayerNAme;
+        private bool m_bIsDash;
+
+    例３）関数内変数
+        var l_fPosX = transform.position.x;
