@@ -9,15 +9,17 @@
 // 更新日     更新者        バージョン 更新内容
 // ---------- ------------- ---------- ---------------------------------------------------------------------------------
 // yyyy/MM/dd anonymous     xx.xx.xx   -
-// 2024/12/15 大行佑也      00.00.01   新規作成
+// 2024/12/15 大行佑也      00.01.00   新規作成
 //======================================================================================================================
 using System;
 using UnityEngine;
 
 namespace BTLGeek
 {
-    public class ApplicationManager : MonoBehaviour
+    public class ApplicationManager : DesignPattern.Singleton<ApplicationManager>
     {
+
+
         //---- フィールド ----------------------------------------------------------------------------------------------
 
         //---- メソッド ------------------------------------------------------------------------------------------------
@@ -28,7 +30,7 @@ namespace BTLGeek
             Com.g_strExeDir = Application.dataPath;
 
             // 各マネージャークラスの作成
-            var ret = ApplicationManager.CreateManager();
+            var ret = CreateManager();
             if (Com.GC_NG == ret) {
                 // メッセージ出してプログラム終了
                 Com.GFn_MessageBox($"起動に失敗しました。\nゲームを終了します。", Com.EMsgBoxButton.OK, Com.EMsgBoxIcon.Error);
@@ -50,14 +52,23 @@ namespace BTLGeek
             var rtn = Com.GC_OK;
 
             try {
+                GameObject  gameObject  = null;
                 // アプリケーションマネージャー
-                GameObject gameObject;
                 gameObject = new GameObject("ApplicationManager");
                 gameObject.AddComponent<ApplicationManager>();
                 DontDestroyOnLoad(gameObject);
+
+                // サウンドマネージャー
+                gameObject = new GameObject("AudioManager");
+                gameObject.AddComponent<SoundManager>();
+                DontDestroyOnLoad(gameObject);
             }
             catch (Exception e) {
-                Debug.LogException(e);
+#if DEBUG
+                Debug.LogError(e);
+#else
+                Com.GFn_MessageBox("アプリケーションの起動に失敗しました。\nゲームを終了します。", Com.EMsgBoxButton.OK, Com.EMsgBoxIcon.Error);
+#endif
                 rtn = Com.GC_NG;
             }
 
