@@ -14,7 +14,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: Default Local Group
   m_GUID: ed78191a3a118924c8d988fba28870cd
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 05138223be56fbd459af0c6eada9df41
+    m_Address: Footsteps03
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Audio
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 38784078a470f25459f2339620878af8
+    m_Address: natsuyasuminotanken
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Audio
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 457d2b6c68a9ace408f5e4758797d0be
+    m_Address: Footsteps02
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Audio
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e914b17291a48a9468a4f68f194ced2a
+    m_Address: Footsteps01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Audio
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5639625679c29874ebd3068ad2d33b19, type: 2}
   m_SchemaSet:
